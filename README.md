@@ -25,6 +25,12 @@ Options:
 
 ## API
 
+Install the dependency:
+
+```sh
+$ npm i @e9x/ipi
+```
+
 API documentation can be found [here](https://github.com/e9x/ipi/blob/master/API.md)
 
 ## Usage in libraries
