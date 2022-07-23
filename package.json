@@ -1,13 +1,13 @@
 {
 	"name": "@e9x/ipi",
-	"version": "1.0.0-pkg2",
+	"version": "1.0.1",
 	"description": "",
 	"bin": "dist/cli.js",
 	"main": "dist/index.js",
 	"scripts": {
 		"build": "tsc",
 		"build:watch": "tsc --watch",
-		"docs": "dts-apigen documentate ./src/index.ts --out ./API.md"
+		"doc": "dts-apigen documentate ./src/index.ts --out ./API.md"
 	},
 	"type": "module",
 	"author": "",
@@ -21,6 +21,7 @@
 	],
 	"devDependencies": {
 		"@ianvs/prettier-plugin-sort-imports": "^3.4.2",
+		"@types/better-sqlite3": "^7.5.0",
 		"@types/node": "^18.0.3",
 		"@typescript-eslint/eslint-plugin": "^5.30.5",
 		"eslint": "^8.19.0",
@@ -28,8 +29,9 @@
 		"typescript": "^4.7.4"
 	},
 	"dependencies": {
-		"async-ip2location": "^8.1.3",
+		"better-sqlite3": "^7.6.2",
 		"commander": "^9.4.0",
+		"ip2location-nodejs": "^9.3.0",
 		"ipaddr.js": "^2.0.1",
 		"node-fetch": "^3.2.9",
 		"pg": "^8.7.3"

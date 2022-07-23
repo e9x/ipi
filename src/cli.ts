@@ -1,7 +1,6 @@
 #!/usr/bin/env node
-import ipi, { loadASNv4, loadASNv6, loadDump } from './index.js';
+import ipi, { openDatabases } from './index.js';
 import { Command } from 'commander';
-import ipaddr from 'ipaddr.js';
 
 const program = new Command();
 
@@ -13,16 +12,8 @@ program
 		`If cache shouldn't be updated. If cache doesn't exist, this option will be ignored.`
 	)
 	.action(async (ip: string, { updateCache }: { updateCache: boolean }) => {
-		// only load necessary database
-		const parsedIP = ipaddr.parse(ip);
-		const promises = [
-			loadDump(updateCache),
-			parsedIP.kind() === 'ipv4'
-				? loadASNv4(updateCache)
-				: loadASNv6(updateCache),
-		];
-		await Promise.all(promises);
-		console.log(await ipi(ip));
+		await openDatabases(updateCache);
+		console.log(ipi(ip));
 	});
 
 program.parse(process.argv);
