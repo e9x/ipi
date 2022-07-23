@@ -49,33 +49,16 @@ const asnDB = new Database(asnDBFile);
 const config = createConfig(join(cacheDir, 'data.json'), () => ({
 	asnV4ETag: '',
 	asnV6ETag: '',
+	createdTables: false,
 }));
 
-const data = asnDB
-	.prepare(
-		`SELECT name FROM sqlite_master WHERE type='table' AND (name='asnV4' or name='asnV6');`
-	)
-	.all();
-
-// need to create tables
-if (data.length !== 2) {
-	asnDB
-		.prepare(
-			`CREATE TABLE asnV4 (
-	type INT,
-	range_start INT NOT NULL,
-	range_end INT NOT NULL,
-	id INT NOT NULL,
-	description TEXT NOT NULL,
-	UNIQUE(type, range_start, range_end)
-);`
-		)
-		.run();
+if (!config.get('createdTables')) {
+	asnDB.prepare(`DROP TABLE IF EXISTS asn;`).run();
 
 	asnDB
 		.prepare(
-			`CREATE TABLE asnV6 (
-	type INT,
+			`CREATE TABLE asn (
+	type INT NOT NULL,
 	range_start1 INT NOT NULL,
 	range_start2 INT NOT NULL,
 	range_start3 INT NOT NULL,
@@ -90,18 +73,27 @@ if (data.length !== 2) {
 );`
 		)
 		.run();
+
+	config.set('createdTables', true);
 }
 
 function ipToBuffer(ip: IPv4 | IPv6) {
 	return Buffer.from(ip.toByteArray());
 }
 
-function IPv4ToInt(ip: IPv4) {
-	return bufferToInt(ipToBuffer(ip));
-}
-
 function bufferToInt(buffer: Buffer) {
 	return parseInt(buffer.toString('hex'), 16);
+}
+
+function SplitIPv4(ip: IPv4) {
+	const buffer = ipToBuffer(ip);
+
+	return [
+		buffer.readUint8(0),
+		buffer.readUint8(1),
+		buffer.readUint8(2),
+		buffer.readUint8(3),
+	];
 }
 
 function SplitIPv6(ip: IPv6) {
@@ -115,38 +107,26 @@ function SplitIPv6(ip: IPv6) {
 	];
 }
 
-const insertV4 = asnDB.prepare(
-	'INSERT INTO asnV4 (type,range_start,range_end,id,description) VALUES (?,?,?,?,?);'
-);
-const insertV6 = asnDB.prepare(
-	'INSERT INTO asnV6 (type,range_start1,range_start2,range_start3,range_start4,range_end1,range_end2,range_end3,range_end4,id,description) VALUES (?,?,?,?,?,?,?,?,?,?,?);'
+const insert = asnDB.prepare(
+	'INSERT INTO asn (type,range_start1,range_start2,range_start3,range_start4,range_end1,range_end2,range_end3,range_end4,id,description) VALUES (?,?,?,?,?,?,?,?,?,?,?);'
 );
 
-const deleteV4 = asnDB.prepare('DELETE FROM asnV4;');
-const deleteV6 = asnDB.prepare('DELETE FROM asnV6;');
+const deleteASN = asnDB.prepare('DELETE FROM asn WHERE type = ?;');
 
-const insertManyV4 = asnDB.transaction((runV4) => {
-	deleteV4.run();
-	for (const run of runV4) insertV4.run(run);
-});
-
-const insertManyV6 = asnDB.transaction((runV6) => {
-	deleteV6.run();
-	for (const run of runV6) insertV6.run(run);
+const insertMany = asnDB.transaction((type: 4 | 6, runs: unknown[][]) => {
+	deleteASN.run(type);
+	for (const run of runs) insert.run(...run);
 });
 
 async function loadASN(key: Databases, updateCache: boolean) {
 	const etagKey = key === 'asnV4' ? 'asnV4ETag' : 'asnV6ETag';
 
-	if ((await config).get(etagKey) && !updateCache) return;
+	if (config.get(etagKey) && !updateCache) return;
 
 	try {
 		const res = await fetch(databaseURLs[key], { method: 'HEAD' });
 
-		if (
-			(await config).get(etagKey) &&
-			res.headers.get('etag') <= (await config).get(etagKey)
-		)
+		if (config.get(etagKey) && res.headers.get('etag') <= config.get(etagKey))
 			return;
 	} catch (error) {
 		// attempt to continue and fetch new cache
@@ -175,8 +155,8 @@ async function loadASN(key: Databases, updateCache: boolean) {
 		if (key === 'asnV4')
 			runV4.push([
 				4,
-				IPv4ToInt(<IPv4>ipaddr.parse(rangeStart)),
-				IPv4ToInt(<IPv4>ipaddr.parse(rangeEnd)),
+				...SplitIPv4(<IPv4>ipaddr.parse(rangeStart)),
+				...SplitIPv4(<IPv4>ipaddr.parse(rangeEnd)),
 				parseInt(id),
 				description,
 			]);
@@ -193,10 +173,9 @@ async function loadASN(key: Databases, updateCache: boolean) {
 	return new Promise<void>((resolve, reject) => {
 		it.on('close', async () => {
 			try {
-				if (key === 'asnV4') insertManyV4(runV4);
-				else insertManyV6(runV6);
-
-				(await config).set(etagKey, res.headers.get('etag'));
+				if (key === 'asnV4') insertMany(4, runV4);
+				else insertMany(4, runV6);
+				config.set(etagKey, res.headers.get('etag'));
 				resolve();
 			} catch (error) {
 				reject(error);
@@ -314,12 +293,8 @@ export async function openDatabases(updateCache = true) {
 	]);
 }
 
-const selectIPv4 = asnDB.prepare(
-	'SELECT description,id FROM asnV4 WHERE type = ? AND range_start <= ? AND range_end >= ? LIMIT 1;'
-);
-
-const selectIPv6 = asnDB.prepare(
-	'SELECT description,id FROM asnV6 WHERE type = ? AND range_start1 <= ? AND range_start2 <= ? AND range_start3 <= ? AND range_start4 <= ? AND range_end1 >= ? AND range_end2 >= ? AND range_end3 >= ? AND range_end4 >= ? LIMIT 1;'
+const select = asnDB.prepare(
+	'SELECT description,id FROM asn WHERE type = ? AND range_start1 <= ? AND range_start2 <= ? AND range_start3 <= ? AND range_start4 <= ? AND range_end1 >= ? AND range_end2 >= ? AND range_end3 >= ? AND range_end4 >= ? LIMIT 1;'
 );
 
 /**
@@ -334,16 +309,11 @@ export default function ipInfo(ip: string): IPInfo & { success: boolean } {
 	let data: { description: string; id: number };
 
 	if (parsedIP.kind() === 'ipv4') {
-		const int = IPv4ToInt(<IPv4>parsedIP);
-		data = selectIPv4.get(parsedIP.kind() === 'ipv4' ? 4 : 6, int, int);
+		const split = SplitIPv4(<IPv4>parsedIP);
+		data = select.get(4, ...split, ...split);
 	} else {
 		const split = SplitIPv6(<IPv6>parsedIP);
-
-		data = selectIPv6.get(
-			parsedIP.kind() === 'ipv4' ? 4 : 6,
-			...split,
-			...split
-		);
+		data = select.get(6, ...split, ...split);
 	}
 
 	if (data) {
