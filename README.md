@@ -24,6 +24,8 @@ Install the CLI tool globally:
 $ npm i --global @e9x/ipi
 ```
 
+> If you encounter a read/write error when running the tool after installing globally on LINUX, refer to https://github.com/sindresorhus/guides/blob/main/npm-global-without-sudo.md
+
 The CLI syntax is as follows:
 
 ```
