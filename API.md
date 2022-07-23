@@ -24,7 +24,11 @@
 
 
 
+<p>
 
+Loads the ASN v4 database
+
+</p>
 
 <details>
 <summary>
@@ -68,7 +72,11 @@
 
 
 
+<p>
 
+Loads the ASN v6 database
+
+</p>
 
 <details>
 <summary>
@@ -112,7 +120,11 @@
 
 
 
+<p>
 
+Loads the dumped IP2LOCATION database
+
+</p>
 
 <details>
 <summary>
@@ -156,7 +168,11 @@
 
 
 
+<p>
 
+Loads all dumps and databases
+
+</p>
 
 <details>
 <summary>
@@ -200,7 +216,11 @@
 
 
 
+<p>
 
+Returns information about the IP
+
+</p>
 
 <details>
 <summary>

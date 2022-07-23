@@ -124,14 +124,30 @@ async function loadASN(key: Databases, updateCache: boolean) {
 	await loadCSV(res.body, key);
 }
 
+/**
+ *
+ * Loads the ASN v4 database
+ * @param updateCache
+ */
 export async function loadASNv4(updateCache = true) {
 	await loadASN('asnV4', updateCache);
 }
 
+/**
+ *
+ * Loads the ASN v6 database
+ * @param updateCache
+ */
 export async function loadASNv6(updateCache = true) {
 	await loadASN('asnV6', updateCache);
 }
 
+/**
+ *
+ * Loads the dumped IP2LOCATION database
+ * @param updateCache
+ * @returns
+ */
 export async function loadDump(updateCache = true) {
 	const file = 'IP2LOCATION-LITE-DB9.IPV6.BIN';
 	const cacheFile = join(cacheDir, file);
@@ -203,6 +219,11 @@ export async function loadDump(updateCache = true) {
 	});
 }
 
+/**
+ *
+ * Loads all dumps and databases
+ * @param updateCache
+ */
 export async function loadDatabases(updateCache = true) {
 	try {
 		await mkdir(cacheDir);
@@ -221,6 +242,7 @@ export async function loadDatabases(updateCache = true) {
 
 /**
  *
+ * Returns information about the IP
  * @param ip IP address
  * @returns IPInfo - When success is false, all values are filled with placeholders.
  */
