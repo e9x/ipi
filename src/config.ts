@@ -1,6 +1,5 @@
 import { constants, writeFileSync } from 'fs';
 import { accessSync, readFileSync } from 'fs';
-import { writeFile } from 'fs/promises';
 
 export class Config<T extends Object> {
 	data: T;
@@ -15,12 +14,7 @@ export class Config<T extends Object> {
 	}
 	set<K extends keyof T>(key: K, value: T[K]) {
 		this.data[key] = value;
-
-		if (!this.writeTimeout)
-			this.writeTimeout = setTimeout(async () => {
-				this.writeTimeout = undefined;
-				await writeFile(this.file, JSON.stringify(this.data));
-			});
+		writeFileSync(this.file, JSON.stringify(this.data));
 	}
 }
 

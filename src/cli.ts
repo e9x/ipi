@@ -14,7 +14,13 @@ program
 	)
 	.action(async (ip: string, { updateCache }: { updateCache: boolean }) => {
 		await openDatabases(updateCache);
-		console.log(ipi(ip));
+
+		try {
+			const info = ipi(ip);
+			console.log(info);
+		} catch (error) {
+			console.error(error);
+		}
 	});
 
 program.parse(process.argv);
