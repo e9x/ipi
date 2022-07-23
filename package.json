@@ -1,8 +1,9 @@
 {
 	"name": "@e9x/ipi",
-	"version": "1.0.0-cli1",
+	"version": "1.0.0-pkg2",
 	"description": "",
 	"bin": "dist/cli.js",
+	"main": "dist/index.js",
 	"scripts": {
 		"build": "tsc",
 		"build:watch": "tsc --watch",
