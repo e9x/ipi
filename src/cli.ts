@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import ipi, { loadASNv4, loadASNv6, loadDump } from './index.js';
 import { Command } from 'commander';
 import ipaddr from 'ipaddr.js';

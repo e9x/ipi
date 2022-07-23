@@ -1,6 +1,6 @@
 {
 	"name": "@e9x/ipi",
-	"version": "1.0.0",
+	"version": "1.0.0-cli1",
 	"description": "",
 	"bin": "dist/cli.js",
 	"scripts": {
