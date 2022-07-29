@@ -145,6 +145,9 @@ async function loadASN(key: Databases, updateCache: boolean) {
 	const runV6 = [];
 
 	it.on('line', (line) => {
+		const tag = line.indexOf('#');
+		if (tag !== -1) line = line.slice(0, tag).trim();
+
 		const split = line.split('\t');
 
 		if (split.length < 5)
@@ -319,7 +322,6 @@ export default function ipInfo(ip: string): IPInfo & { success: boolean } {
 	if (data) {
 		const geoData = il.getAll(ip);
 
-		// can't query geo database
 		return {
 			success: true,
 			asn: data.id,
