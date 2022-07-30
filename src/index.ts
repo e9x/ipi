@@ -51,13 +51,8 @@ try {
 const il = new IL.IP2Location();
 const asnDB = new Database(asnDBFile);
 const config = createConfig(join(cacheDir, 'data.json'), () => ({
-<<<<<<< HEAD
 	asnV4Modified: 0,
 	asnV6Modified: 0,
-=======
-	asnV4Modified: '',
-	asnV6Modified: '',
->>>>>>> 63da8ceb3b06a3b902118fafafcfdfcd54e788a1
 	binModified: '',
 	createdTables: false,
 }));
@@ -109,7 +104,6 @@ const insertMany = asnDB.transaction((type: 4 | 6, runs: unknown[][]) => {
 async function loadASN(key: Databases, updateCache: boolean) {
 	const cacheKey = key === 'asnV4' ? 'asnV4Modified' : 'asnV6Modified';
 
-<<<<<<< HEAD
 	if (config.get(cacheKey)) {
 		if (!updateCache) return;
 
@@ -123,17 +117,6 @@ async function loadASN(key: Databases, updateCache: boolean) {
 	}
 
 	const res = await fetch(databaseURLs[key]);
-=======
-	if (config.get(cacheKey) && !updateCache) return;
-
-	const res = await fetch(databaseURLs[key], {
-		headers: {
-			'if-modified-since': config.get(cacheKey) || undefined,
-		},
-	});
-
-	if (res.status === 304) return;
->>>>>>> 63da8ceb3b06a3b902118fafafcfdfcd54e788a1
 
 	const stream = res.body;
 
@@ -177,17 +160,12 @@ async function loadASN(key: Databases, updateCache: boolean) {
 		it.on('close', async () => {
 			try {
 				if (key === 'asnV4') insertMany(4, runV4);
-<<<<<<< HEAD
 				else insertMany(6, runV6);
 				config.set(
 					cacheKey,
 					// add 3 hours to offset iptoasn not purging cache
 					new Date(res.headers.get('last-modified')!).getTime() + 60e3 * 60 * 3
 				);
-=======
-				else insertMany(4, runV6);
-				config.set(cacheKey, res.headers.get('last-modified'));
->>>>>>> 63da8ceb3b06a3b902118fafafcfdfcd54e788a1
 				resolve();
 			} catch (error) {
 				reject(error);
