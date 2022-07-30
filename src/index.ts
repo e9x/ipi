@@ -1,3 +1,4 @@
+import conditionIP from './conditionIP.js';
 import createConfig from './config.js';
 import Database from 'better-sqlite3';
 import { createWriteStream, mkdirSync } from 'fs';
@@ -275,7 +276,7 @@ export async function openDatabases(updateCache = true) {
 }
 
 const select = asnDB.prepare(
-	'SELECT description,id FROM asn WHERE type = ? AND range_start1 <= ? AND range_start2 <= ? AND range_start3 <= ? AND range_start4 <= ? AND range_end1 >= ? AND range_end2 >= ? AND range_end3 >= ? AND range_end4 >= ? LIMIT 1;'
+	`SELECT description,id FROM asn WHERE type = :type AND ${conditionIP} LIMIT 1;`
 );
 
 /**
@@ -289,9 +290,13 @@ export default function ipInfo(ip: string): IPInfo & { success: boolean } {
 
 	const split = splitIP(parsedIP);
 
-	const data = <{ description: string; id: number }>(
-		select.get(parsedIP.kind() === 'ipv4' ? 4 : 6, ...split, ...split)
-	);
+	const data = <{ description: string; id: number }>select.get({
+		type: parsedIP.kind() === 'ipv4' ? 4 : 6,
+		ip1: split[0],
+		ip2: split[1],
+		ip3: split[2],
+		ip4: split[3],
+	});
 
 	if (data) {
 		const geoData = il.getAll(ip);
