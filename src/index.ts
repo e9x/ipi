@@ -2,7 +2,7 @@ import conditionIP from './conditionIP.js';
 import createConfig from './config.js';
 import Database from 'better-sqlite3';
 import { createWriteStream, mkdirSync } from 'fs';
-import { access, stat } from 'fs/promises';
+import { access } from 'fs/promises';
 import IL from 'ip2location-nodejs';
 import ipaddr from 'ipaddr.js';
 import fetch from 'node-fetch';
@@ -27,6 +27,9 @@ export interface IPInfo {
 
 type Databases = 'asnV4' | 'asnV6';
 
+const binReleasesURL =
+	'https://api.github.com/repos/e9x/ip2location-dumps/releases';
+
 const databaseURLs: { [key in Databases]: string } = {
 	asnV4: 'https://iptoasn.com/data/ip2asn-v4.tsv.gz',
 	asnV6: 'https://iptoasn.com/data/ip2asn-v6.tsv.gz',
@@ -48,8 +51,9 @@ try {
 const il = new IL.IP2Location();
 const asnDB = new Database(asnDBFile);
 const config = createConfig(join(cacheDir, 'data.json'), () => ({
-	asnV4ETag: '',
-	asnV6ETag: '',
+	asnV4Modified: 0,
+	asnV6Modified: 0,
+	binModified: '',
 	createdTables: false,
 }));
 
@@ -98,18 +102,18 @@ const insertMany = asnDB.transaction((type: 4 | 6, runs: unknown[][]) => {
 });
 
 async function loadASN(key: Databases, updateCache: boolean) {
-	const etagKey = key === 'asnV4' ? 'asnV4ETag' : 'asnV6ETag';
+	const cacheKey = key === 'asnV4' ? 'asnV4Modified' : 'asnV6Modified';
 
-	if (config.get(etagKey) && !updateCache) return;
+	if (config.get(cacheKey)) {
+		if (!updateCache) return;
 
-	try {
-		const res = await fetch(databaseURLs[key], { method: 'HEAD' });
-
-		if (config.get(etagKey) && res.headers.get('etag') <= config.get(etagKey))
-			return;
-	} catch (error) {
-		// attempt to continue and fetch new cache
-		// if (error?.code !== 'ENOENT') throw error;
+		try {
+			const res = await fetch(databaseURLs[key], { method: 'HEAD' });
+			const modified = new Date(res.headers.get('last-modified')!).getTime();
+			if (modified < config.get(cacheKey)) return;
+		} catch (error) {
+			// continue
+		}
 	}
 
 	const res = await fetch(databaseURLs[key]);
@@ -156,8 +160,12 @@ async function loadASN(key: Databases, updateCache: boolean) {
 		it.on('close', async () => {
 			try {
 				if (key === 'asnV4') insertMany(4, runV4);
-				else insertMany(4, runV6);
-				config.set(etagKey, res.headers.get('etag'));
+				else insertMany(6, runV6);
+				config.set(
+					cacheKey,
+					// add 3 hours to offset iptoasn not purging cache
+					new Date(res.headers.get('last-modified')!).getTime() + 60e3 * 60 * 3
+				);
 				resolve();
 			} catch (error) {
 				reject(error);
@@ -180,9 +188,7 @@ async function loadDump(updateCache = true) {
 			// ignore error
 		}
 
-	const releasesRes = await fetch(
-		'https://api.github.com/repos/e9x/ip2location-dumps/releases'
-	);
+	const releasesRes = await fetch(binReleasesURL);
 
 	if (!releasesRes.ok)
 		throw new Error(
@@ -194,55 +200,49 @@ async function loadDump(updateCache = true) {
 			).message
 		);
 
+	interface Asset {
+		name: string;
+		updated_at: string;
+		browser_download_url: string;
+	}
+
 	const releases = <
 		{
 			name: string;
-			assets: {
-				name: string;
-				browser_download_url: string;
-			}[];
+			assets: Asset[];
 		}[]
 	>await releasesRes.json();
 
-	let bin: string;
+	let bin: Asset;
 
 	for (const release of releases)
 		for (const asset of release.assets)
 			if (asset.name === ip2locationFile) {
-				bin = asset.browser_download_url;
+				bin = asset;
 				break;
 			}
 
 	if (!bin) throw new Error(`Bin wasn't released`);
 
-	try {
-		const cacheStats = await stat(ip2locationCacheFile);
-		const res = await fetch(bin, { method: 'HEAD' });
-
-		for (const header of ['last-modified', 'content-length'])
-			if (!res.headers.has(header)) throw new Error(`missing headers`);
-
-		const lastModified = new Date(res.headers.get('last-modified')!);
-		const contentLength = parseInt(res.headers.get('content-length')!);
-
-		if (
-			lastModified.getTime() <= cacheStats.mtimeMs &&
-			contentLength === cacheStats.size
-		) {
-			il.open(ip2locationCacheFile);
-			return;
+	if (bin.updated_at === config.get('binModified'))
+		try {
+			{
+				await access(ip2locationCacheFile);
+				il.open(ip2locationCacheFile);
+				return;
+			}
+		} catch (error) {
+			// attempt to continue and fetch new cache
+			// if (error?.code !== 'ENOENT') throw error;
 		}
-	} catch (error) {
-		// attempt to continue and fetch new cache
-		// if (error?.code !== 'ENOENT') throw error;
-	}
 
-	const res = await fetch(bin);
+	const res = await fetch(bin.browser_download_url);
 	const write = createWriteStream(ip2locationCacheFile);
 
 	return new Promise<void>((resolve, reject) => {
 		write.on('close', async () => {
 			il.open(ip2locationCacheFile);
+			config.set('binModified', bin.updated_at);
 			resolve();
 		});
 

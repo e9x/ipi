@@ -37,7 +37,7 @@ Arguments:
   IP                 IP address. Can be IPv4 or IPv6
 
 Options:
-  --no-update-cache  If cache shouldn't be updated. If cache doesn't exist, this option will be ignored.
+  --update  If cache should be updated. If cache doesn't exist, this option will be ignored.
   -h, --help         display help for command
 
 Commands:
