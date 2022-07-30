@@ -12,7 +12,7 @@ import { createGunzip } from 'zlib';
 
 export interface IPInfo {
 	asn: number;
-	asDescription: string;
+	asd: string;
 	// derive from 2nd database
 	city: string;
 	region: string;
@@ -325,7 +325,7 @@ export default function ipInfo(ip: string): IPInfo & { success: boolean } {
 		return {
 			success: true,
 			asn: data.id,
-			asDescription: data.description,
+			asd: data.description,
 			city: geoData.city,
 			region: geoData.region,
 			zipCode: geoData.zipCode,
