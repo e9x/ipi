@@ -299,7 +299,7 @@ export default function ipInfo(ip: string): IPInfo & { success: boolean } {
 	});
 
 	if (data) {
-		const geoData = il.getAll(ip);
+		const geoData = il.getAll(parsedIP.toString());
 
 		return {
 			success: true,
