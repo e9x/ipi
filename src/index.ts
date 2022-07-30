@@ -3,7 +3,7 @@ import Database from 'better-sqlite3';
 import { createWriteStream, mkdirSync } from 'fs';
 import { access, stat } from 'fs/promises';
 import IL from 'ip2location-nodejs';
-import ipaddr, { IPv4, IPv6 } from 'ipaddr.js';
+import ipaddr from 'ipaddr.js';
 import fetch from 'node-fetch';
 import { dirname, join } from 'path';
 import { createInterface } from 'readline';
@@ -77,34 +77,12 @@ if (!config.get('createdTables')) {
 	config.set('createdTables', true);
 }
 
-function ipToBuffer(ip: IPv4 | IPv6) {
-	return Buffer.from(ip.toByteArray());
-}
+function splitIP(ip) {
+	if (ip.kind() === 'ipv4') return ip.toByteArray();
 
-function bufferToInt(buffer: Buffer) {
-	return parseInt(buffer.toString('hex'), 16);
-}
-
-function SplitIPv4(ip: IPv4) {
-	const buffer = ipToBuffer(ip);
-
-	return [
-		buffer.readUint8(0),
-		buffer.readUint8(1),
-		buffer.readUint8(2),
-		buffer.readUint8(3),
-	];
-}
-
-function SplitIPv6(ip: IPv6) {
-	const buffer = ipToBuffer(ip);
-
-	return [
-		bufferToInt(buffer.subarray(0, 4)),
-		bufferToInt(buffer.subarray(4, 8)),
-		bufferToInt(buffer.subarray(8, 12)),
-		bufferToInt(buffer.subarray(12, 16)),
-	];
+	return new Uint32Array(
+		new Uint8Array(ip.toByteArray().reverse()).buffer
+	).reverse();
 }
 
 const insert = asnDB.prepare(
@@ -158,16 +136,16 @@ async function loadASN(key: Databases, updateCache: boolean) {
 		if (key === 'asnV4')
 			runV4.push([
 				4,
-				...SplitIPv4(<IPv4>ipaddr.parse(rangeStart)),
-				...SplitIPv4(<IPv4>ipaddr.parse(rangeEnd)),
+				...splitIP(ipaddr.parse(rangeStart)),
+				...splitIP(ipaddr.parse(rangeEnd)),
 				parseInt(id),
 				description,
 			]);
 		else
 			runV6.push([
 				6,
-				...SplitIPv6(<IPv6>ipaddr.parse(rangeStart)),
-				...SplitIPv6(<IPv6>ipaddr.parse(rangeEnd)),
+				...splitIP(ipaddr.parse(rangeStart)),
+				...splitIP(ipaddr.parse(rangeEnd)),
 				parseInt(id),
 				description,
 			]);
@@ -309,15 +287,11 @@ const select = asnDB.prepare(
 export default function ipInfo(ip: string): IPInfo & { success: boolean } {
 	const parsedIP = ipaddr.parse(ip);
 
-	let data: { description: string; id: number };
+	const split = splitIP(parsedIP);
 
-	if (parsedIP.kind() === 'ipv4') {
-		const split = SplitIPv4(<IPv4>parsedIP);
-		data = select.get(4, ...split, ...split);
-	} else {
-		const split = SplitIPv6(<IPv6>parsedIP);
-		data = select.get(6, ...split, ...split);
-	}
+	const data = <{ description: string; id: number }>(
+		select.get(parsedIP.kind() === 'ipv4' ? 4 : 6, ...split, ...split)
+	);
 
 	if (data) {
 		const geoData = il.getAll(ip);
@@ -340,7 +314,7 @@ export default function ipInfo(ip: string): IPInfo & { success: boolean } {
 	return {
 		success: false,
 		asn: 0,
-		asDescription: 'Unassigned',
+		asd: 'Unassigned',
 		city: '-',
 		region: '-',
 		zipCode: '0',
