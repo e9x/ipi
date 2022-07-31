@@ -46,7 +46,10 @@ Options:
 Example:
 
 ```sh
-$ node ./dist/cli.js 2607:f188::dead:beef:cafe:fed1
+$ ipi 2607:f188::dead:beef:cafe:fed1
+```
+
+```json
 {
   success: true,
   asn: 21769,
