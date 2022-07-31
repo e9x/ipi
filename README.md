@@ -34,14 +34,11 @@ Usage: ipi [options] <IP>
 IP-Info cli
 
 Arguments:
-  IP                 IP address. Can be IPv4 or IPv6
+  IP          IP address. Can be IPv4 or IPv6
 
 Options:
-  --update  If cache should be updated. If cache doesn't exist, this option will be ignored.
-  -h, --help         display help for command
-
-Commands:
-  delete             Deletes the IP databases
+  --update    If cache should be updated. If cache doesn't exist, this option will be ignored. (default: false)
+  -h, --help  display help for command
 ```
 
 Example:
