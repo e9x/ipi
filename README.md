@@ -49,7 +49,7 @@ Example:
 $ ipi 2607:f188::dead:beef:cafe:fed1
 ```
 
-```json
+```js
 {
   success: true,
   asn: 21769,
