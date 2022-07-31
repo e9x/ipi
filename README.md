@@ -51,7 +51,7 @@ $ node ./dist/cli.js 2607:f188::dead:beef:cafe:fed1
 {
   success: true,
   asn: 21769,
-  asDescription: 'AS-COLOAM',
+  asd: 'AS-COLOAM',
   city: 'Las Vegas',
   region: 'Nevada',
   zipCode: '89136',
