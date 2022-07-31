@@ -1,5 +1,7 @@
 # IPI (IP-Info)
 
+<a href="https://www.npmjs.com/package/@e9x/ipi"><img src="https://img.shields.io/npm/v/@e9x/ipi.svg?maxAge=3600" alt="npm version" /></a>
+
 A quick tool to fetch IP information.
 
 > Due to the nature of the databases used (SQLITE, IP2Location), this project is littered with synchronous operations. If you're looking for a fully asynchronous API, this will not satisfy you. There are solutions such as wrapping this API for [piscina](https://www.npmjs.com/package/piscina).
