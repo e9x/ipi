@@ -1,7 +1,7 @@
 {
 	"name": "@e9x/ipi",
-	"version": "1.1.0-tags5",
-	"description": "",
+	"version": "1.1.0-tags6",
+	"description": "A quick tool to fetch IP information.",
 	"bin": "dist/cli.js",
 	"main": "dist/index.js",
 	"scripts": {
