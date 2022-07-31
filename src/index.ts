@@ -178,7 +178,7 @@ async function loadASN(key: Databases, updateCache: boolean) {
 	});
 }
 
-async function loadDump(updateCache = true) {
+async function loadDump(updateCache) {
 	if (!updateCache)
 		try {
 			await access(ip2locationCacheFile);
@@ -265,9 +265,9 @@ export async function closeDatabases() {
 /**
  *
  * Loads/initializes databases. If there is no database present in cache, updateCache will be ignored in order to initialize the databases.
- * @param updateCache
+ * @param updateCache If cache should be checked for updates. Default is to not check for updates.
  */
-export async function openDatabases(updateCache = true) {
+export async function openDatabases(updateCache = false) {
 	await Promise.all([
 		loadDump(updateCache),
 		loadASN('asnV4', updateCache),
