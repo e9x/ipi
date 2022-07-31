@@ -6,8 +6,7 @@
 	"main": "dist/index.js",
 	"scripts": {
 		"build": "tsc",
-		"build:watch": "tsc --watch",
-		"doc": "dts-apigen documentate ./src/index.ts --out ./API.md"
+		"build:watch": "tsc --watch"
 	},
 	"type": "module",
 	"author": "",

@@ -65,13 +65,13 @@ $ node ./dist/cli.js 2607:f188::dead:beef:cafe:fed1
 
 ## API
 
+API documentation is no longer provided. The typedefs included in the NPM package should be enough to understand the API.
+
 Install the dependency:
 
 ```sh
 $ npm i @e9x/ipi
 ```
-
-API documentation can be found [here](https://github.com/e9x/ipi/blob/master/API.md)
 
 Example:
 
