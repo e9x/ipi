@@ -215,11 +215,14 @@ async function loadDump(updateCache) {
 
 	let bin: Asset;
 
-	for (const release of releases)
+	// github orders from oldest->newest releases
+	releases.reverse();
+
+	rel: for (const release of releases)
 		for (const asset of release.assets)
 			if (asset.name === ip2locationFile) {
 				bin = asset;
-				break;
+				break rel;
 			}
 
 	if (!bin) throw new Error(`Bin wasn't released`);
