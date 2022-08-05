@@ -215,8 +215,7 @@ async function loadDump(updateCache) {
 
 	let bin: Asset;
 
-	// github orders from oldest->newest releases
-	releases.reverse();
+	// github orders from newest->oldest releases
 
 	rel: for (const release of releases)
 		for (const asset of release.assets)
