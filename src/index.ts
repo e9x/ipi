@@ -4,7 +4,7 @@ import Database from 'better-sqlite3';
 import { createWriteStream, mkdirSync } from 'fs';
 import { access } from 'fs/promises';
 import IL from 'ip2location-nodejs';
-import ipaddr from 'ipaddr.js';
+import ipaddr, { IPv4, IPv6 } from 'ipaddr.js';
 import fetch from 'node-fetch';
 import { dirname, join } from 'path';
 import { createInterface } from 'readline';
@@ -82,7 +82,7 @@ if (!config.get('createdTables')) {
 	config.set('createdTables', true);
 }
 
-function splitIP(ip) {
+function splitIP(ip: IPv4 | IPv6) {
 	if (ip.kind() === 'ipv4') return ip.toByteArray();
 
 	return new Uint32Array(
