@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 import ipi, { openDatabases } from './index.js';
 import { Command } from 'commander';
 
