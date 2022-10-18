@@ -1,4 +1,4 @@
-import { ip2asnPath, ip2locationPath } from "ipi-databases";
+import { ip2asnPath, ip2locationPath } from "@e9x/ipi-databases";
 import conditionIP from "./conditionIP.js";
 import Database from "better-sqlite3";
 import IL from "ip2location-nodejs";
