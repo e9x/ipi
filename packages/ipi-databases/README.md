@@ -23,3 +23,9 @@ https://lite.ip2location.com/login
 3. Save the file as `ip2location.db` (this is what we reference)
 
 4. Put the database into the `dist` directory within ipi-databases
+
+5. Verify your work by running the validation script:
+
+```sh
+$ npm run prepublish
+```
