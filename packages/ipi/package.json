@@ -1,48 +1,48 @@
 {
-	"name": "@e9x/ipi",
-	"version": "1.1.2",
-	"description": "A quick tool to fetch IP information.",
-	"bin": "bin.js",
-	"main": "dist/index.js",
-	"scripts": {
-		"build": "tsc",
-		"build:watch": "tsc --watch"
-	},
-	"type": "module",
-	"author": "",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/e9x/ipi.git"
-	},
-	"license": "GPLv3",
-	"files": [
-		"dist",
-		"bin.js"
-	],
-	"keywords": [
-		"ip",
-		"ip2location",
-		"iptoasn",
-		"api",
-		"location",
-		"geolocation",
-		"asn",
-		"information"
-	],
-	"devDependencies": {
-		"@ianvs/prettier-plugin-sort-imports": "^3.4.2",
-		"@types/better-sqlite3": "^7.5.0",
-		"@types/node": "^18.0.3",
-		"@typescript-eslint/eslint-plugin": "^5.30.5",
-		"eslint": "^8.19.0",
-		"prettier": "^2.7.1",
-		"typescript": "^4.7.4"
-	},
-	"dependencies": {
-		"better-sqlite3": "^7.6.2",
-		"commander": "^9.4.0",
-		"ip2location-nodejs": "^9.3.0",
-		"ipaddr.js": "^2.0.1",
-		"node-fetch": "^3.2.9"
-	}
+  "name": "@e9x/ipi",
+  "version": "1.1.2",
+  "description": "A quick tool to fetch IP information.",
+  "author": "e9x",
+  "license": "GPLv3",
+  "homepage": "https://github.com/e9x/ipi/tree/master/packages/ipi",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/e9x/ipi.git"
+  },
+  "keywords": [
+    "ip",
+    "ip2location",
+    "iptoasn",
+    "api",
+    "location",
+    "geolocation",
+    "asn",
+    "information"
+  ],
+  "type": "module",
+  "bin": "bin.js",
+  "main": "dist/index.js",
+  "files": [
+    "dist",
+    "bin.js"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch"
+  },
+  "devDependencies": {
+    "@ianvs/prettier-plugin-sort-imports": "^3.4.2",
+    "@types/better-sqlite3": "^7.5.0",
+    "@types/node": "^18.0.3",
+    "@typescript-eslint/eslint-plugin": "^5.30.5",
+    "eslint": "^8.19.0",
+    "prettier": "^2.7.1",
+    "typescript": "^4.7.4"
+  },
+  "dependencies": {
+    "better-sqlite3": "^7.6.2",
+    "commander": "^9.4.0",
+    "ip2location-nodejs": "^9.3.0",
+    "ipaddr.js": "^2.0.1"
+  }
 }
