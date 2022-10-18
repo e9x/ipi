@@ -75,23 +75,8 @@ Install the dependency:
 $ npm i @e9x/ipi
 ```
 
-Example:
-
-```js
-import ipi, { openDatabases } from './index.js';
-
-// openDatabases must be called before ipi
-// true - check for updated databases
-// false - load cached (if exists, otherwise it will load updated databases anyway)
-await openDatabases(true);
-console.log(ipi('2607:f188::dead:beef:cafe:fed1'));
-console.log(ipi('190.239.202.254'));
-```
-
-## Good practices
-
-When used as an API, occasionally call `openDatabases(true)`. This will check for updated databases and loads them. IP to ASN updates hourly, IP2Location updates bi-weekly.
+See [examples/](examples/) for examples of the API.
 
 ## Usage in libraries
 
-This API shouldn't be used in a library. If IP information is required, make the user pass the information from this library or require the user to call `openDatabases()` on their behalf.
+As of v2.0.0-beta, this package is safe to use in libraries! Data fetching is done when publishing the package.
