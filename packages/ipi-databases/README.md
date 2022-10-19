@@ -1,5 +1,7 @@
 # ipi-databases
 
+<a href="https://www.npmjs.com/package/@e9x/ipi-databases"><img src="https://img.shields.io/npm/v/@e9x/ipi-databases.svg?maxAge=3600" alt="npm version" /></a>
+
 This package contains the databases used in [IPI](https://www.npmjs.com/package/@e9x/ipi). A library is exposed to help locate the database files.
 
 ## Building the ASN database
