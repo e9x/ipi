@@ -1,7 +1,7 @@
-import { ip2asnPath, ip2locationPath } from "@e9x/ipi-databases";
 import conditionIP from "./conditionIP.js";
+import { ip2asnPath, ip2locationPath } from "@e9x/ipi-databases";
 import Database from "better-sqlite3";
-import IL from "ip2location-nodejs";
+import { IP2Location } from "ip2location-nodejs";
 import type { IPv4, IPv6 } from "ipaddr.js";
 import ipaddr from "ipaddr.js";
 
@@ -31,7 +31,7 @@ const splitIP = (ip: IPv4 | IPv6) => {
   ] as IPsegs;
 };
 
-const il = new IL.IP2Location();
+const il = new IP2Location();
 const asnDB = new Database(ip2asnPath, { readonly: true });
 
 il.open(ip2locationPath);

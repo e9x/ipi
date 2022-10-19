@@ -1,13 +1,15 @@
 {
   "compilerOptions": {
     "types": ["node"],
-    "lib": ["ESNext", "DOM"],
+    "lib": ["ESNext"],
     "target": "ESNext",
-    "module": "ESNext",
+    "module": "CommonJS",
     "outDir": "dist",
     "allowSyntheticDefaultImports": true,
     "moduleResolution": "node",
+    "esModuleInterop": true,
     "declaration": true,
     "strict": true
-  }
+  },
+  "include": ["./src/*.ts"]
 }

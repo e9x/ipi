@@ -1,7 +1,7 @@
 {
   "name": "@e9x/ipi",
   "version": "2.0.0-beta",
-  "description": "A quick tool to fetch IP information.",
+  "description": "A free library/cli tool to get IP information.",
   "author": "e9x",
   "license": "GPLv3",
   "homepage": "https://github.com/e9x/ipi/tree/master/packages/ipi",
@@ -19,7 +19,7 @@
     "asn",
     "information"
   ],
-  "type": "module",
+  "type": "commonjs",
   "bin": "bin.js",
   "main": "dist/index.js",
   "files": [
@@ -41,7 +41,6 @@
   },
   "dependencies": {
     "better-sqlite3": "^7.6.2",
-    "commander": "^9.4.0",
     "ip2location-nodejs": "^9.3.0",
     "ipaddr.js": "^2.0.1"
   }

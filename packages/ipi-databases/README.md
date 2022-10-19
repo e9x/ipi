@@ -1,6 +1,6 @@
 # ipi-databases
 
-The databases used in the IPI package.
+This package contains the databases used in [IPI](https://www.npmjs.com/package/@e9x/ipi). A library is exposed to help locate the database files.
 
 ## Building the ASN database
 
