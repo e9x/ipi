@@ -22,9 +22,11 @@
   "type": "commonjs",
   "bin": "bin.js",
   "main": "dist/index.js",
+  "typings": "index.d.ts",
   "files": [
     "dist",
-    "bin.js"
+    "bin.js",
+    "index.d.ts"
   ],
   "scripts": {
     "build": "tsc",
@@ -40,6 +42,7 @@
     "typescript": "^4.7.4"
   },
   "dependencies": {
+    "@e9x/ipi-databases": "file:../ipi-databases/e9x-ipi-databases-1.0.0-monthly.2022.10.tgz",
     "better-sqlite3": "^7.6.2",
     "ip2location-nodejs": "^9.3.0",
     "ipaddr.js": "^2.0.1"
