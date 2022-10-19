@@ -6,14 +6,18 @@ A free library/cli tool to get IP information.
 
 ## Performance
 
-> Due to the nature of the databases used (SQLITE, IP2Location), this project is littered with synchronous operations. If you're looking for a fully asynchronous API, this will not satisfy you. There are solutions such as wrapping this API for [piscina](https://www.npmjs.com/package/piscina). Hopefully the API is fast enough to justify using this library in your project.
+Due to the nature of libraries used (SQLite3, IP2Location), this project is seemingly littered with synchronous operations.
 
-This API is very fast:.
+Despite this, this project still delivers reasonable runtime performance that beats using an API.
+
+Benchmarks: (not quite accurate, tested on my development machine)
 
 | test        | ms    |
 | ----------- | ----- |
 | `require()` | 44.36 |
 | `ipi()`     | 0.066 |
+
+An extreme solution to the blocking API is wrapping the API with [piscina](https://www.npmjs.com/package/piscina).
 
 ## CLI
 
@@ -33,7 +37,7 @@ Usage: ipi <IP>
 IP-Info cli
 
 Arguments:
-  IP          IP address. Can be IPv4 or IPv6
+  IP          IP address. Can be IPv4 or IPv6.
 ```
 
 Example:
