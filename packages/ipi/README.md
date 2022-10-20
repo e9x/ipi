@@ -70,7 +70,7 @@ Install the dependency:
 $ npm i @e9x/ipi
 ```
 
-See [examples/](examples/) for examples of the API.
+See [examples/](https://github.com/e9x/ipi/tree/master/packages/ipi/examples) for examples of the API.
 
 ## Usage in libraries
 
