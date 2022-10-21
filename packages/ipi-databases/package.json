@@ -16,7 +16,7 @@
     "dist"
   ],
   "scripts": {
-    "ip2asn": "ts-node-esm scripts/createASN.mts",
+    "iptoasn": "ts-node-esm scripts/iptoasn.mts",
     "prepublishOnly": "ts-node-esm scripts/validateIP2Location.mts"
   },
   "devDependencies": {
