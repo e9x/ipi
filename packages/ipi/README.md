@@ -12,10 +12,10 @@ Despite this, this project still delivers reasonable runtime performance that be
 
 Benchmarks: (not quite accurate, tested on my development machine)
 
-| test        | ms    |
-| ----------- | ----- |
-| `require()` | 44.36 |
-| `ipi()`     | 0.066 |
+| test        | duration |
+| ----------- | -------- |
+| `require()` | 44.36 ms |
+| `ipi()`     | 0.066 ms |
 
 An extreme solution to the blocking API is wrapping the API with [piscina](https://www.npmjs.com/package/piscina).
 
