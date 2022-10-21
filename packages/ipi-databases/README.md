@@ -2,31 +2,31 @@
 
 <a href="https://www.npmjs.com/package/@e9x/ipi-databases"><img src="https://img.shields.io/npm/v/@e9x/ipi-databases.svg?maxAge=3600" alt="npm version" /></a>
 
-This package contains the databases used in [IPI](https://www.npmjs.com/package/@e9x/ipi). A library is exposed to help locate the database files.
+This is a part of [IPI](https://www.npmjs.com/package/@e9x/ipi).
 
-## Building the ASN database
+This package provides a compiled [IPtoASN](https://iptoasn.com/) database and a free [IP2Location](https://lite.ip2location.com/) database.
+
+This site or product includes IP2Location LITE data available from [https://lite.ip2location.com](https://lite.ip2location.com).
+
+## Compiling the ASN database
+
+This will download data from [IPtoASN](https://iptoasn.com/) and compile a SQLite3 database.
 
 ```sh
-$ npm run ip2asn
+$ npm run iptoasn
 ```
 
-## Aquiring the IP2Location database
+## Downloading the IP2Location database
 
-> ⚠ Only do this with a burner account. This will get your IP2Location account banned! (They watermark the databases with your account name)
+- You will need your download token from [here](https://lite.ip2location.com/database-download).
 
-> TODO: run a diff on the databases and obfuscate the watermark
+```sh
+$ npm run ip2location <download token>
+```
 
-1. Login to the IP2Location (lite) website
+## Verifying databases
 
-https://lite.ip2location.com/login
-
-2. Look for `DB11.LITE` or `IP-COUNTRY-REGION-CITY-LATITUDE-LONGITUDE-ZIPCODE-TIMEZONE`
-
-3. Save the file as `ip2location.db` (this is what we reference)
-
-4. Put the database into the `dist` directory within ipi-databases
-
-5. Verify your work by running the validation script:
+This will make sure the IPtoASN database can be successfully queried and the IP2Location database returns correct data.
 
 ```sh
 $ npm run prepublish
