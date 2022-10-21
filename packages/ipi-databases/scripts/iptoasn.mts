@@ -5,12 +5,12 @@ import { mkdir, unlink } from "fs/promises";
 import ipaddr from "ipaddr.js";
 import type { IPv4, IPv6 } from "ipaddr.js";
 import fetch from "node-fetch";
-import { join } from "path";
+import { dirname } from "path";
 import { createInterface } from "readline";
 import { createGunzip } from "zlib";
 
 try {
-  await mkdir(join(ip2asnPath, ".."), { recursive: true });
+  await mkdir(dirname(ip2asnPath), { recursive: true });
 } catch (err) {
   if ((err as NodeJS.ErrnoException).code !== "EEXIST") throw err;
 }
