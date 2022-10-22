@@ -3,7 +3,7 @@
   "version": "2.0.0",
   "description": "A free library/cli tool to get IP information.",
   "author": "e9x",
-  "license": "GPLv3",
+  "license": "MIT",
   "homepage": "https://github.com/e9x/ipi/tree/master/packages/ipi",
   "repository": {
     "type": "git",

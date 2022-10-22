@@ -3,7 +3,7 @@
   "version": "1.0.0-monthly.2022.10",
   "description": "Databases for an IP information package.",
   "author": "e9x",
-  "license": "GPLv3",
+  "license": "MIT",
   "homepage": "https://github.com/e9x/ipi/tree/master/packages/ipi-databases",
   "repository": {
     "type": "git",
