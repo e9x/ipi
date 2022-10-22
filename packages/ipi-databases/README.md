@@ -13,7 +13,7 @@ This site or product includes IP2Location LITE data available from [https://lite
 This will download data from [IPtoASN](https://iptoasn.com/) and compile a SQLite3 database.
 
 ```sh
-$ npm run iptoasn
+$ npm run ip2asn
 ```
 
 ## Downloading the IP2Location database

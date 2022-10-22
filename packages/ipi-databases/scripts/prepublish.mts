@@ -1,5 +1,5 @@
 import validateIP2Location from "./validateIP2Location.mjs";
-import validateIPtoASN from "./validateIPtoASN.mjs";
+import validateIP2ASN from "./validateIPtoASN.mjs";
 
-validateIPtoASN();
+validateIP2ASN();
 validateIP2Location();

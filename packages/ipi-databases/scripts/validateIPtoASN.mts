@@ -2,7 +2,7 @@ import { ip2asnPath } from "../lib/index.js";
 import Database from "better-sqlite3";
 import { access } from "node:fs/promises";
 
-const validateIPtoASN = async () => {
+const validateIP2ASN = async () => {
   try {
     await access(ip2asnPath);
   } catch (err) {
@@ -25,4 +25,4 @@ const validateIPtoASN = async () => {
     throw new Error("Validation failed.");
 };
 
-export default validateIPtoASN;
+export default validateIP2ASN;
