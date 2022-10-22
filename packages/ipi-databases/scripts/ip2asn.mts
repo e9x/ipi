@@ -25,9 +25,8 @@ try {
 
 const asnDB = new Database(ip2asnPath);
 
-asnDB
-  .prepare(
-    `CREATE TABLE asn (
+asnDB.exec(
+  `CREATE TABLE asn (
 	version INT NOT NULL,
 	range_start1 INT NOT NULL,
 	range_start2 INT NOT NULL,
@@ -41,10 +40,17 @@ asnDB
 	description TEXT NOT NULL,
 	UNIQUE(version, range_start1, range_start2, range_start3, range_start4, range_end1, range_end2, range_end3, range_end4)
 );`
-  )
-  .run();
+);
 
-const insert = asnDB.prepare(
+type InsertData = [
+  version: number,
+  ...rangeStart: IPsegs,
+  ...rangeEnd: IPsegs,
+  asn: number,
+  description: string
+];
+
+const insert = asnDB.prepare<InsertData>(
   "INSERT INTO asn (version,range_start1,range_start2,range_start3,range_start4,range_end1,range_end2,range_end3,range_end4,id,description) VALUES (?,?,?,?,?,?,?,?,?,?,?);"
 );
 
@@ -62,18 +68,10 @@ const splitIP = (ip: IPv4 | IPv6) => {
   ] as IPsegs;
 };
 
-type InsertData = [
-  version: number,
-  ...rangeStart: IPsegs,
-  ...rangeEnd: IPsegs,
-  asn: number,
-  description: string
-];
-
 const insertMany = asnDB.transaction((version: 4 | 6, runs: InsertData[]) => {
   deleteASN.run(version);
   for (const run of runs) insert.run(...run);
-}) as (version: 4 | 6, data: InsertData[]) => void;
+});
 
 for (const [version, url] of [
   [4, "https://iptoasn.com/data/ip2asn-v4.tsv.gz"],
