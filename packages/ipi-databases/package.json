@@ -16,7 +16,7 @@
     "dist"
   ],
   "scripts": {
-    "ip2asn": "ts-node-esm scripts/iptoasn.mts",
+    "ip2asn": "ts-node-esm scripts/ip2asn.mts",
     "ip2location": "ts-node-esm scripts/ip2location.mts",
     "prepublishOnly": "ts-node-esm scripts/prepublish.mts"
   },
