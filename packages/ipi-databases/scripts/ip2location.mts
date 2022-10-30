@@ -1,8 +1,8 @@
 import { ip2locationPath } from "../lib/index.js";
-import { mkdir, unlink, writeFile } from "fs/promises";
+import { mkdir, unlink, writeFile } from "node:fs/promises";
 import JSZip from "jszip";
 import fetch from "node-fetch";
-import { dirname } from "path";
+import { dirname } from "node:path";
 
 const [, , downloadToken] = process.argv;
 
