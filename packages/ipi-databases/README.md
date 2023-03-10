@@ -29,5 +29,5 @@ $ npm run ip2location <download token>
 This will make sure the IPtoASN database can be successfully queried and the IP2Location database returns correct data.
 
 ```sh
-$ npm run prepublish
+$ npm run prepublishOnly
 ```
