@@ -3,10 +3,8 @@
   "devDependencies": {
     "prettier": "^2.7.1"
   },
-  "workspaces": {
-    "packages": [
-      "ipi",
-      "ipi-databases"
-    ]
-  }
+  "workspaces": [
+    "packages/ipi",
+    "packages/ipi-databases"
+  ]
 }
