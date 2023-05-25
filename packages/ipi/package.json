@@ -20,7 +20,9 @@
     "information"
   ],
   "type": "commonjs",
-  "bin": "bin.js",
+  "bin": {
+    "ipi": "bin.js"
+  },
   "main": "dist/index.js",
   "typings": "index.d.ts",
   "files": [
