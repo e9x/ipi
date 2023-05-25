@@ -18,10 +18,16 @@ const validateIP2ASN = async () => {
     version: 4 | 6;
   }>(`SELECT * FROM asn WHERE version = :version LIMIT 1;`);
 
-  if (select.get({ version: 4 })?.version !== 4)
+  if (
+    (select.get({ version: 4 }) as undefined | { version: number })?.version !==
+    4
+  )
     throw new Error("Validation failed.");
 
-  if (select.get({ version: 6 })?.version !== 6)
+  if (
+    (select.get({ version: 6 }) as undefined | { version: number })?.version !==
+    6
+  )
     throw new Error("Validation failed.");
 };
 
