@@ -44,7 +44,7 @@
     "typescript": "^5.0.4"
   },
   "dependencies": {
-    "@e9x/ipi-databases": "^1.0.0-monthly.2023.3",
+    "@e9x/ipi-databases": "^1.0.0-monthly.2023.5",
     "better-sqlite3": "^8.4.0",
     "ip2location-nodejs": "^9.5.0",
     "ipaddr.js": "^2.0.1"
